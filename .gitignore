@@ -1,0 +1,6 @@
+/.idea
+/vendor
+*.exe
+coverage.out
+go.work
+go.work.sum
