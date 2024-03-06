@@ -52,10 +52,12 @@ func NewBuilder(c Config) *Builder {
 	return &b
 }
 
+const alwaysOn = "always_on"
+
 func NewDevelopmentBuilder(c Config) *Builder {
 	b := NewBuilder(c)
-	b.Tracer.Sampler = "always_on"
-	//b.TracerProvider.WithSpanExporters(StdoutSpanExporter())
+	b.Tracer.Sampler = alwaysOn
+	b.TracerProvider.WithSpanExporters(StdoutSpanExporter())
 	return b
 }
 
