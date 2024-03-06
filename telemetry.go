@@ -7,14 +7,12 @@ package telemetry
 import (
 	"context"
 	"github.com/go-pogo/errors"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel/metric"
 	metricnoop "go.opentelemetry.io/otel/metric/noop"
 	metricsdk "go.opentelemetry.io/otel/sdk/metric"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/trace"
 	tracenoop "go.opentelemetry.io/otel/trace/noop"
-	"net/http"
 )
 
 type MeterProvider = metric.MeterProvider
@@ -25,6 +23,7 @@ type Provider interface {
 	TracerProvider() TracerProvider
 }
 
+// Telemetry is a wrapper around a MeterProvider and TracerProvider.
 type Telemetry struct {
 	meter  *metricsdk.MeterProvider
 	tracer *tracesdk.TracerProvider
@@ -53,20 +52,6 @@ func (t *Telemetry) TracerProvider() TracerProvider {
 		return tracenoop.NewTracerProvider()
 	}
 	return t.tracer
-}
-
-// NewHttpHandler creates a http.Handler which records metrics for any incoming
-// requests handled by h.
-func (t *Telemetry) NewHttpHandler(h http.Handler, operation string, opts ...otelhttp.Option) http.Handler {
-	if len(opts) == 0 {
-		opts = append(opts, otelhttp.WithMessageEvents(otelhttp.ReadEvents, otelhttp.WriteEvents))
-	}
-	opts = append(opts,
-		otelhttp.WithTracerProvider(t.TracerProvider()),
-		otelhttp.WithMeterProvider(t.MeterProvider()),
-	)
-
-	return otelhttp.NewHandler(h, operation, opts...)
 }
 
 // ForceFlush flushes all pending telemetry and/or immediately exports all spans
