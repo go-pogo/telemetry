@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="test" type="GoTestRunConfiguration" factoryName="Go Test">
+        <module name="telemetry" />
+        <working_directory value="$PROJECT_DIR$" />
+        <go_parameters value="-race" />
+        <root_directory value="$PROJECT_DIR$" />
+        <kind value="DIRECTORY" />
+        <package value="./..." />
+        <directory value="$PROJECT_DIR$" />
+        <filePath value="$PROJECT_DIR$" />
+        <framework value="gotest" />
+        <method v="2" />
+    </configuration>
+</component>
