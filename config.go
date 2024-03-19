@@ -17,22 +17,34 @@ type Config struct {
 	Tracer TracerProviderConfig
 
 	// https://opentelemetry.io/docs/languages/sdk-configuration/general/
-	//ResourceAttributes      map[string]string `env:"OTEL_RESOURCE_ATTRIBUTES"`
-	ExporterOTLPEndpoint    string `env:"OTEL_EXPORTER_OTLP_ENDPOINT"`
-	ExporterOTLPHeaders     string `env:"OTEL_EXPORTER_OTLP_HEADERS"`
-	ExporterOTLPProtocol    string `env:"OTEL_EXPORTER_OTLP_PROTOCOL" default:"grpc"`
-	ExporterOTLPTimeout     uint64 `env:"OTEL_EXPORTER_OTLP_TIMEOUT" default:"10000"` // 10s
-	ExporterOTLPCertificate string `env:"OTEL_EXPORTER_OTLP_CERTIFICATE"`
+	ServiceName        string            `env:"OTEL_SERVICE_NAME"`
+	ResourceAttributes map[string]string `env:"OTEL_RESOURCE_ATTRIBUTES"`
+
+	ExporterOTLP struct {
+		Endpoint          string `env:"OTEL_EXPORTER_OTLP_ENDPOINT"`
+		Headers           string `env:"OTEL_EXPORTER_OTLP_HEADERS"`
+		Protocol          string `env:"OTEL_EXPORTER_OTLP_PROTOCOL" default:"grpc"`
+		Timeout           uint64 `env:"OTEL_EXPORTER_OTLP_TIMEOUT" default:"10000"` // 10s
+		Certificate       string `env:"OTEL_EXPORTER_OTLP_CERTIFICATE"`
+		ClientKey         string `env:"OTEL_EXPORTER_OTLP_CLIENT_KEY"`
+		ClientCertificate string `env:"OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE"`
+	}
 }
 
 func (c Config) Environ() (env.Map, error) {
+	attr, err := rawconv.Marshal(c.ResourceAttributes)
+	if err != nil {
+		return nil, err
+	}
+
 	return env.Map{
-		//"OTEL_RESOURCE_ATTRIBUTES": env.Value(c.ResourceAttributes),
-		"OTEL_EXPORTER_OTLP_ENDPOINT":    env.Value(c.ExporterOTLPEndpoint),
-		"OTEL_EXPORTER_OTLP_HEADERS":     env.Value(c.ExporterOTLPHeaders),
-		"OTEL_EXPORTER_OTLP_PROTOCOL":    env.Value(c.ExporterOTLPProtocol),
-		"OTEL_EXPORTER_OTLP_TIMEOUT":     rawconv.ValueFromUint64(c.ExporterOTLPTimeout),
-		"OTEL_EXPORTER_OTLP_CERTIFICATE": env.Value(c.ExporterOTLPCertificate),
+		"OTEL_SERVICE_NAME":              env.Value(c.ServiceName),
+		"OTEL_RESOURCE_ATTRIBUTES":       attr,
+		"OTEL_EXPORTER_OTLP_ENDPOINT":    env.Value(c.ExporterOTLP.Endpoint),
+		"OTEL_EXPORTER_OTLP_HEADERS":     env.Value(c.ExporterOTLP.Headers),
+		"OTEL_EXPORTER_OTLP_PROTOCOL":    env.Value(c.ExporterOTLP.Protocol),
+		"OTEL_EXPORTER_OTLP_TIMEOUT":     rawconv.ValueFromUint64(c.ExporterOTLP.Timeout),
+		"OTEL_EXPORTER_OTLP_CERTIFICATE": env.Value(c.ExporterOTLP.Certificate),
 	}, nil
 }
 
@@ -72,7 +84,7 @@ func (b *Builder) Global() *Builder {
 }
 
 func (b *Builder) WithDefaultExporter() *Builder {
-	switch b.ExporterOTLPProtocol {
+	switch b.ExporterOTLP.Protocol {
 	case "grpc":
 		b.MeterProvider.WithGrpcExporter()
 		b.TracerProvider.WithGrpcExporter()
