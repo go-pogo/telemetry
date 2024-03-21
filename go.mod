@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/go-pogo/env v0.4.0
 	github.com/go-pogo/errors v0.9.0
-	github.com/go-pogo/rawconv v0.5.0
+	github.com/go-pogo/rawconv v0.5.2
 	github.com/prometheus/client_golang v1.19.0
 	github.com/stretchr/testify v1.9.0
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.49.0
