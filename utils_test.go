@@ -15,8 +15,7 @@ func TestAttributesFromMap(t *testing.T) {
 		attribute.String("key1", "value1"),
 		attribute.String("key2", "value2"),
 	}
-
-	assert.Equal(t, want, AttributesFromMap(map[string]string{
+	assert.ElementsMatch(t, want, AttributesFromMap(map[string]string{
 		"key1": "value1",
 		"key2": "value2",
 	}))
