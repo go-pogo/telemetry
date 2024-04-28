@@ -15,6 +15,7 @@ import (
 	otelprom "go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"golang.org/x/net/context"
+	"time"
 )
 
 var _ env.Environment = (*MeterProviderConfig)(nil)
@@ -35,6 +36,15 @@ type MeterProviderConfig struct {
 	// ExportTimeout is the maximum allowed time (in milliseconds) to export
 	// data.
 	ExportTimeout int `env:"OTEL_METRIC_EXPORT_TIMEOUT" default:"30000"`
+}
+
+func (c MeterProviderConfig) ExportIntervalDuration() time.Duration {
+	return time.Duration(c.ExportInterval) * time.Millisecond
+}
+
+func (c MeterProviderConfig) ExportTimeoutDuration() time.Duration {
+	return time.Duration(c.ExportTimeout) * time.Millisecond
+
 }
 
 func (c MeterProviderConfig) Environ() (env.Map, error) {
