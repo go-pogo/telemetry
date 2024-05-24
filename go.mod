@@ -3,7 +3,7 @@ module github.com/go-pogo/telemetry
 go 1.21
 
 require (
-	github.com/go-pogo/env v0.4.3
+	github.com/go-pogo/env v0.4.4
 	github.com/go-pogo/errors v0.10.0
 	github.com/go-pogo/rawconv v0.5.3
 	github.com/prometheus/client_golang v1.19.1
