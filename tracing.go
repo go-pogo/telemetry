@@ -101,18 +101,19 @@ func (tra *TracerProviderBuilder) WithGrpcExporter(opts ...otlptracegrpc.Option)
 	return tra.With(trace.WithBatcher(exp))
 }
 
-func (tra *TracerProviderBuilder) WithBuildInfo() *TracerProviderBuilder {
-	if bld, ok := debug.ReadBuildInfo(); ok {
-		if tra.Attributes == nil {
-			tra.Attributes = make([]attribute.KeyValue, 0, len(bld.Settings))
+func (tra *TracerProviderBuilder) WithBuildInfo(info *debug.BuildInfo) *TracerProviderBuilder {
+	if info == nil {
+		return tra
+	}
+	if tra.Attributes == nil {
+		tra.Attributes = make([]attribute.KeyValue, 0, len(info.Settings))
+	}
+	for _, set := range info.Settings {
+		if !strings.HasPrefix(set.Key, "vcs.") {
+			continue
 		}
-		for _, set := range bld.Settings {
-			if !strings.HasPrefix(set.Key, "vcs.") {
-				continue
-			}
 
-			tra.Attributes = append(tra.Attributes, attribute.String(set.Key, set.Value))
-		}
+		tra.Attributes = append(tra.Attributes, attribute.String(set.Key, set.Value))
 	}
 	return tra
 }
