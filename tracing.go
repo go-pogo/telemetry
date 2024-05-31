@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
 	"golang.org/x/net/context"
 	"runtime/debug"
 	"strings"
@@ -101,13 +102,12 @@ func (tra *TracerProviderBuilder) WithGrpcExporter(opts ...otlptracegrpc.Option)
 	return tra.With(trace.WithBatcher(exp))
 }
 
-func (tra *TracerProviderBuilder) WithBuildInfo(info *debug.BuildInfo) *TracerProviderBuilder {
+func (tra *TracerProviderBuilder) WithBuildInfo(info *debug.BuildInfo, modules ...string) *TracerProviderBuilder {
 	if info == nil {
 		return tra
 	}
-	if tra.Attributes == nil {
-		tra.Attributes = make([]attribute.KeyValue, 0, len(info.Settings))
-	}
+
+	_ = tra.WithAttributes(semconv.ServiceVersion(info.Main.Version))
 	for _, set := range info.Settings {
 		if !strings.HasPrefix(set.Key, "vcs.") {
 			continue
@@ -115,6 +115,18 @@ func (tra *TracerProviderBuilder) WithBuildInfo(info *debug.BuildInfo) *TracerPr
 
 		tra.Attributes = append(tra.Attributes, attribute.String(set.Key, set.Value))
 	}
+	if len(modules) > 0 {
+		for _, dep := range info.Deps {
+			for _, name := range modules {
+				if dep.Path != name {
+					continue
+				}
+
+				tra.Attributes = append(tra.Attributes, attribute.String(dep.Path, dep.Version))
+			}
+		}
+	}
+
 	return tra
 }
 
