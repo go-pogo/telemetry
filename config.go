@@ -76,6 +76,10 @@ func (b *Builder) Global() *Builder {
 }
 
 func (b *Builder) WithDefaultExporter() *Builder {
+	if b.ExporterOTLP.Endpoint == "" {
+		return b
+	}
+
 	switch b.ExporterOTLP.Protocol {
 	case "grpc":
 		b.MeterProvider.WithGrpcExporter()
