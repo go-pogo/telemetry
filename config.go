@@ -105,22 +105,38 @@ func (c Config) Environ() (env.Map, error) {
 		return nil, err
 	}
 
-	m, _ := c.ExporterOTLP.Environ()
-	m.MergeValues(map[string]env.Value{
+	m := env.Map{
 		"OTEL_SERVICE_NAME":        env.Value(c.ServiceName),
 		"OTEL_RESOURCE_ATTRIBUTES": attr,
-	})
+	}
+	if otlp, _ := c.ExporterOTLP.Environ(); otlp != nil {
+		m.MergeValues(otlp)
+	}
 	return m, nil
 }
 
 func (c ExporterOTLPConfig) Environ() (env.Map, error) {
-	return env.Map{
-		"OTEL_EXPORTER_OTLP_ENDPOINT":    env.Value(c.Endpoint),
-		"OTEL_EXPORTER_OTLP_HEADERS":     env.Value(c.Headers),
-		"OTEL_EXPORTER_OTLP_PROTOCOL":    env.Value(c.Protocol),
-		"OTEL_EXPORTER_OTLP_TIMEOUT":     rawconv.ValueFromUint64(c.Timeout),
-		"OTEL_EXPORTER_OTLP_CERTIFICATE": env.Value(c.Certificate),
-	}, nil
+	m := make(env.Map, 5)
+	m["OTEL_EXPORTER_OTLP_PROTOCOL"] = env.Value(c.Protocol)
+	m["OTEL_EXPORTER_OTLP_TIMEOUT"] = rawconv.ValueFromUint64(c.Timeout)
+
+	if c.Endpoint != "" {
+		m["OTEL_EXPORTER_OTLP_ENDPOINT"] = env.Value(c.Endpoint)
+	}
+	if c.Headers != "" {
+		m["OTEL_EXPORTER_OTLP_HEADERS"] = env.Value(c.Headers)
+	}
+	if c.Certificate != "" {
+		m["OTEL_EXPORTER_OTLP_CERTIFICATE"] = env.Value(c.Certificate)
+	}
+	if c.ClientKey != "" {
+		m["OTEL_EXPORTER_OTLP_CLIENT_KEY"] = env.Value(c.ClientKey)
+	}
+	if c.ClientCertificate != "" {
+		m["OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE"] = env.Value(c.ClientCertificate)
+	}
+
+	return m, nil
 }
 
 type errList struct {
