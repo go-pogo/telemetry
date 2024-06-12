@@ -5,6 +5,8 @@
 package telemetry
 
 import (
+	"time"
+
 	"github.com/go-pogo/env"
 	"github.com/go-pogo/errors"
 	"github.com/go-pogo/rawconv"
@@ -15,7 +17,6 @@ import (
 	otelprom "go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"golang.org/x/net/context"
-	"time"
 )
 
 var _ env.Environment = (*MeterProviderConfig)(nil)

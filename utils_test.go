@@ -5,9 +5,10 @@
 package telemetry
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"go.opentelemetry.io/otel/attribute"
-	"testing"
 )
 
 func TestAttributesFromMap(t *testing.T) {

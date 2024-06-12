@@ -5,6 +5,9 @@
 package telemetry
 
 import (
+	"runtime/debug"
+	"strings"
+
 	"github.com/go-pogo/env"
 	"github.com/go-pogo/errors"
 	"go.opentelemetry.io/otel"
@@ -14,8 +17,6 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
 	"golang.org/x/net/context"
-	"runtime/debug"
-	"strings"
 )
 
 var _ env.Environment = (*TracerProviderConfig)(nil)

@@ -6,10 +6,11 @@ package telemetry
 
 import (
 	"fmt"
+	"os"
+
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/trace"
-	"os"
 )
 
 func AttributesFromMap(m map[string]string) []attribute.KeyValue {

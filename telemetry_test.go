@@ -5,12 +5,13 @@
 package telemetry
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	metricnoop "go.opentelemetry.io/otel/metric/noop"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/trace"
 	tracenoop "go.opentelemetry.io/otel/trace/noop"
-	"testing"
 )
 
 func TestTelemetry_MeterProvider(t *testing.T) {

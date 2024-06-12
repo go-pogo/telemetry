@@ -6,6 +6,7 @@ package telemetry
 
 import (
 	"context"
+
 	"github.com/go-pogo/errors"
 	"go.opentelemetry.io/otel/metric"
 	metricnoop "go.opentelemetry.io/otel/metric/noop"

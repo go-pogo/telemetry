@@ -5,10 +5,11 @@
 package telemetry
 
 import (
+	"time"
+
 	"github.com/go-pogo/env"
 	"github.com/go-pogo/errors"
 	"github.com/go-pogo/rawconv"
-	"time"
 )
 
 var _ env.Environment = (*Config)(nil)
