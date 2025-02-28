@@ -3,9 +3,9 @@ module github.com/go-pogo/telemetry
 go 1.22.0
 
 require (
-	github.com/go-pogo/env v0.4.8
-	github.com/go-pogo/errors v0.11.2
-	github.com/go-pogo/rawconv v0.6.2
+	github.com/go-pogo/env v0.4.9
+	github.com/go-pogo/errors v0.12.0
+	github.com/go-pogo/rawconv v0.6.3
 	github.com/prometheus/client_golang v1.21.0
 	github.com/stretchr/testify v1.10.0
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.59.0
