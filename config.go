@@ -52,8 +52,8 @@ func NewBuilder(c Config) *Builder {
 
 	// make sure the configs are referenced from the copy of c,
 	// which is set to Builder.Config
-	b.MeterProvider = NewMeterProviderBuilder(&b.Config.Meter)
-	b.TracerProvider = NewTracerProviderBuilder(&b.Config.Tracer)
+	b.MeterProvider = NewMeterProviderBuilder(&b.Meter)
+	b.TracerProvider = NewTracerProviderBuilder(&b.Tracer)
 	return &b
 }
 

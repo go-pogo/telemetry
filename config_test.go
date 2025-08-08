@@ -14,8 +14,8 @@ import (
 func TestNewBuilder(t *testing.T) {
 	t.Run("ensure correct config pointers", func(t *testing.T) {
 		b := NewBuilder(Config{})
-		assert.Same(t, &b.Config.Meter, b.MeterProvider.MeterProviderConfig)
-		assert.Same(t, &b.Config.Tracer, b.TracerProvider.TracerProviderConfig)
+		assert.Same(t, &b.Meter, b.MeterProvider.MeterProviderConfig)
+		assert.Same(t, &b.Tracer, b.TracerProvider.TracerProviderConfig)
 	})
 }
 
