@@ -12,7 +12,7 @@ import (
 	"github.com/go-pogo/rawconv"
 )
 
-var _ env.Environment = (*Config)(nil)
+var _ env.Mapper = (*Config)(nil)
 
 type Config struct {
 	Meter  MeterProviderConfig
@@ -25,7 +25,7 @@ type Config struct {
 	ExporterOTLP ExporterOTLPConfig
 }
 
-var _ env.Environment = (*ExporterOTLPConfig)(nil)
+var _ env.Mapper = (*ExporterOTLPConfig)(nil)
 
 type ExporterOTLPConfig struct {
 	Endpoint          string `env:"OTEL_EXPORTER_OTLP_ENDPOINT"`

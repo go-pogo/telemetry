@@ -19,7 +19,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
 )
 
-var _ env.Environment = (*TracerProviderConfig)(nil)
+var _ env.Mapper = (*TracerProviderConfig)(nil)
 
 type TracerProviderConfig struct {
 	Enabled bool `env:"OTEL_TRACES_ENABLED" default:"true"`

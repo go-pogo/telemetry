@@ -19,7 +19,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/metric"
 )
 
-var _ env.Environment = (*MeterProviderConfig)(nil)
+var _ env.Mapper = (*MeterProviderConfig)(nil)
 
 // MeterProviderConfig holds the configuration for the MeterProviderBuilder.
 // These values may be set using any external source, such as environment
